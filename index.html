@@ -1,0 +1,2714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DbisV1.0 - Management Information System</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-window">
+            <div class="login-header">
+                <i class="fas fa-globe"></i>
+                <h1>Dbis Version 1.0</h1>
+            </div>
+            <div class="login-content">
+                <div class="login-form">
+                    <div class="form-group">
+                        <label>User name</label>
+                        <input type="text" id="username" placeholder="Enter username">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="password" placeholder="Enter password">
+                    </div>
+                    <div class="form-group">
+                        <label>Company</label>
+                        <select id="company">
+                            <option value="breeze">Breeze</option>
+                        </select>
+                    </div>
+                    <div class="login-buttons">
+                        <button class="btn-ok" onclick="login()">
+                            <i class="fas fa-check"></i>
+                            <span>Ok</span>
+                        </button>
+                        <button class="btn-close" onclick="closeApp()">
+                            <i class="fas fa-times"></i>
+                            <span>Close</span>
+                        </button>
+                    </div>
+                    <div class="test-buttons">
+                        <button class="btn-test" onclick="testLogin()" style="background: #ff9800; color: white; border: none; padding: 8px 16px; border-radius: 4px; margin-top: 10px; cursor: pointer;">
+                            <i class="fas fa-bug"></i> Test Login (Debug)
+                        </button>
+                    </div>
+                    <div class="test-credentials-info">
+                        <small><i class="fas fa-info-circle"></i> Test Mode: admin/admin, test/test, demo/demo, user/user, manager/manager, sanya/password, david/david123</small>
+                    </div>
+                </div>
+            </div>
+            <div class="login-footer">
+                <span>Last Updated 26 September 2019 03:21</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="mainApp" class="main-app hidden">
+        <!-- Top Header -->
+        <header class="app-header">
+            <div class="header-title">
+                <h1>DbisV1.0->Management Information System</h1>
+            </div>
+            <div class="header-controls">
+                <button class="btn-header" onclick="toggleNavigator()">
+                    <i class="fas fa-eye-slash"></i>
+                    Hide Navigator
+                </button>
+                <button class="btn-header" onclick="changePassword()">
+                    <i class="fas fa-key"></i>
+                    Change Pwd
+                </button>
+                <button class="btn-header" onclick="refresh()">
+                    <i class="fas fa-sync-alt"></i>
+                    Refresh
+                </button>
+                <button class="btn-icon" title="Stocks">
+                    <i class="fas fa-boxes"></i>
+                </button>
+                <button class="btn-icon" title="Shopping">
+                    <i class="fas fa-shopping-bag"></i>
+                </button>
+                <button class="btn-icon" title="Finance">
+                    <i class="fas fa-money-bill-wave"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <div class="main-container">
+            <!-- Left Sidebar -->
+            <nav class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <h2 id="currentModule">Accounts</h2>
+                </div>
+                
+                <!-- Navigation Menu -->
+                <div class="nav-menu" id="navMenu">
+                    <!-- Accounts Module -->
+                    <div class="module-section" id="accountsModule">
+                        <div class="module-header expandable" onclick="toggleSection('accountsSettings')">
+                            <i class="fas fa-minus"></i>
+                            <span>Settings</span>
+                        </div>
+                        <div class="module-items" id="accountsSettings">
+                            <div class="nav-item" onclick="showClientsTerms()">
+                                <i class="fas fa-chevron-right"></i>
+                                <span>Clients Terms</span>
+                            </div>
+                            <div class="nav-item" onclick="showCustomers()">
+                                <i class="fas fa-chevron-right"></i>
+                                <span>Customers</span>
+                            </div>
+                            <div class="nav-item" onclick="showInvoiceReversal()">
+                                <i class="fas fa-chevron-right"></i>
+                                <span>Invoice Reversal</span>
+                            </div>
+                            <div class="nav-item" onclick="showSuppliers()">
+                                <i class="fas fa-chevron-right"></i>
+                                <span>Suppliers</span>
+                            </div>
+                        </div>
+                        
+                        <div class="module-header expandable" onclick="toggleSection('accountsTransactions')">
+                            <i class="fas fa-minus"></i>
+                            <span>Transactions</span>
+                        </div>
+                        <div class="module-items" id="accountsTransactions">
+                            <div class="nav-item" onclick="showCustomerOpeningBalance()">
+                                <i class="fas fa-chevron-right"></i>
+                                <span>Customer Opening Balance</span>
+                            </div>
+                            <div class="nav-item" onclick="showCustomerReceipts()">
+                                <i class="fas fa-chevron-right"></i>
+                                <span>Customer Receipts</span>
+                            </div>
+                            <div class="nav-item active" onclick="showCustomerInvoices()">
+                                <i class="fas fa-chevron-right"></i>
+                                <span>Customers Invoices</span>
+                            </div>
+                            <div class="nav-item" onclick="showPettyCash()">
+                                <i class="fas fa-chevron-right"></i>
+                                <span>Petty Cash</span>
+                            </div>
+                        </div>
+                        
+                        <div class="module-header expandable" onclick="toggleSection('accountsReports')">
+                            <i class="fas fa-minus"></i>
+                            <span>Reports</span>
+                        </div>
+                        <div class="module-items" id="accountsReports">
+                            <div class="nav-item" onclick="showClientsAgedAnalysis()">
+                                <i class="fas fa-chevron-right"></i>
+                                <span>Clients Aged Analysis</span>
+                            </div>
+                            <div class="nav-item" onclick="showCustomersAllocation()">
+                                <i class="fas fa-chevron-right"></i>
+                                <span>Customers Allocation</span>
+                            </div>
+                            <div class="nav-item" onclick="showCustomersPrepayment()">
+                                <i class="fas fa-chevron-right"></i>
+                                <span>Customers Prepayment</span>
+                            </div>
+                            <div class="nav-item" onclick="showCustomersStatement()">
+                                <i class="fas fa-chevron-right"></i>
+                                <span>Customers Statements</span>
+                            </div>
+                            <div class="nav-item" onclick="showProfitLoss()">
+                                <i class="fas fa-chevron-right"></i>
+                                <span>Profit & Loss</span>
+                            </div>
+                            <div class="nav-item" onclick="showPurchases()">
+                                <i class="fas fa-chevron-right"></i>
+                                <span>Purchases</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Module Buttons -->
+                <div class="module-buttons">
+                    <button class="module-btn" id="stocksBtn" onclick="switchModule('stocks')">
+                        <i class="fas fa-truck"></i>
+                        <span>Stocks</span>
+                    </button>
+                    <button class="module-btn active" id="accountsBtn" onclick="switchModule('accounts')">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>Accounts</span>
+                    </button>
+                    <button class="module-btn" id="adminBtn" onclick="switchModule('admin')">
+                        <i class="fas fa-user-cog"></i>
+                        <span>Administrator</span>
+                    </button>
+                    <button class="module-btn" id="fuelBtn" onclick="switchModule('fuel')">
+                        <i class="fas fa-gas-pump"></i>
+                        <span>Fuel</span>
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Tab Navigation -->
+                <div class="tab-navigation">
+                    <div class="tab active" id="debtorsInvoiceListTab">
+                        <span>Debtors Invoice List</span>
+                        <button class="tab-close" onclick="closeTab('debtorsInvoiceListTab')">×</button>
+                    </div>
+                    <div class="tab" id="invoiceTab">
+                        <span>Invoice</span>
+                        <button class="tab-close" onclick="closeTab('invoiceTab')">×</button>
+                    </div>
+                </div>
+
+                <!-- Content Area -->
+                <div class="content-area" id="contentArea">
+                    <!-- Default Dashboard -->
+                    <div class="dashboard" id="dashboard">
+                        <div class="welcome-section">
+                            <h2>Welcome to DbisV1.0</h2>
+                            <p>Management Information System</p>
+                        </div>
+                    </div>
+
+                    <!-- Debtors Invoice List -->
+                    <div class="content-window hidden" id="debtorsInvoiceList">
+                        <div class="window-header">
+                            <i class="fas fa-desktop"></i>
+                            <h3>Debtors Invoice List</h3>
+                            <div class="window-controls">
+                                <button class="btn-help">?</button>
+                                <button class="btn-close-window">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <div class="filter-section">
+                                <div class="filter-group">
+                                    <label>Status:</label>
+                                    <div class="radio-group">
+                                        <input type="radio" id="allStatus" name="status" checked>
+                                        <label for="allStatus">ALL</label>
+                                        <input type="radio" id="draftStatus" name="status">
+                                        <label for="draftStatus">Draft</label>
+                                        <input type="radio" id="approvedStatus" name="status">
+                                        <label for="approvedStatus">Approved</label>
+                                    </div>
+                                </div>
+                                <div class="filter-group">
+                                    <input type="text" placeholder="Search..." class="search-input">
+                                    <button class="btn-go">Go</button>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Order By:</label>
+                                    <select>
+                                        <option>Entry Id</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Number</th>
+                                            <th>Customer No</th>
+                                            <th>Customer Name</th>
+                                            <th>Invoice Date</th>
+                                            <th>Level</th>
+                                            <th>Amount</th>
+                                            <th>Amount Paid</th>
+                                            <th>Currency</th>
+                                            <th>Branch</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="9" class="no-data">No records found</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="date-filter">
+                                <label>
+                                    <input type="checkbox" checked> Use Date
+                                </label>
+                                <div class="date-inputs">
+                                    <input type="date" value="2025-08-28">
+                                    <span>to</span>
+                                    <input type="date" value="2025-08-28">
+                                </div>
+                            </div>
+                            
+                            <div class="record-info">
+                                <span>0 Record(s)</span>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-action">New</button>
+                                <button class="btn-action">Edit</button>
+                                <button class="btn-action">Print</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Invoice Form -->
+                    <div class="content-window hidden" id="invoiceForm">
+                        <div class="window-header">
+                            <i class="fas fa-desktop"></i>
+                            <h3>Invoice</h3>
+                            <div class="window-controls">
+                                <button class="btn-help">?</button>
+                                <button class="btn-close-window">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <div class="form-header">
+                                <div class="form-group">
+                                    <label>
+                                        <input type="checkbox" checked> Auto
+                                    </label>
+                                    <input type="text" value="AUTO" readonly class="auto-field">
+                                </div>
+                                <div class="form-group">
+                                    <label>Number</label>
+                                    <input type="text" value="AUTO" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label>Lpo No.</label>
+                                    <select>
+                                        <option>Select LPO</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Location</label>
+                                    <select>
+                                        <option>STORE</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Order No.</label>
+                                    <select>
+                                        <option>Select Order</option>
+                                    </select>
+                                </div>
+                                <button class="btn-refresh">Refresh</button>
+                            </div>
+                            
+                            <div class="customer-section">
+                                <div class="form-group">
+                                    <label>Customer</label>
+                                    <input type="text" value="SANYA">
+                                    <button class="btn-clear">Clear</button>
+                                </div>
+                                <div class="form-group">
+                                    <label>Branch</label>
+                                    <select>
+                                        <option>Select Branch</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Contact</label>
+                                    <input type="text" value="0715593483">
+                                </div>
+                                <div class="form-group">
+                                    <label>Inv Date</label>
+                                    <input type="date" value="2025-08-28">
+                                </div>
+                                <div class="form-group">
+                                    <label>Due Date</label>
+                                    <input type="date" value="2025-08-28">
+                                </div>
+                                <div class="form-group">
+                                    <label>Sales Rep</label>
+                                    <select>
+                                        <option>Select Sales Rep</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>LS No.</label>
+                                    <input type="text">
+                                </div>
+                                <div class="form-group">
+                                    <label>Comments</label>
+                                    <input type="text">
+                                </div>
+                            </div>
+                            
+                            <div class="add-item-section">
+                                <h4>Add Item</h4>
+                                <div class="item-form">
+                                    <div class="form-group">
+                                        <label>Code</label>
+                                        <select>
+                                            <option>GEL 150GMS</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Names</label>
+                                        <select>
+                                            <option>GEL 150 GMS</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Qty</label>
+                                        <input type="number" value="20">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Unit Price</label>
+                                        <input type="number" value="300.00">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>
+                                            <input type="checkbox"> Bonus(Qty)
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Batch No</label>
+                                        <input type="text">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Cost Center</label>
+                                        <select>
+                                            <option>Head Office</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>
+                                            <input type="checkbox" checked> Stocks
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn-details">Details</button>
+                                        <button class="btn-add">Add</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="items-table">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Item Code</th>
+                                            <th>Item Description</th>
+                                            <th>Line Total</th>
+                                            <th>Vatable</th>
+                                            <th>Vat</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>*</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="vat-section">
+                                <div class="vat-mode">
+                                    <label>
+                                        <input type="checkbox" checked> Inclusive
+                                    </label>
+                                    <label>
+                                        <input type="checkbox" checked> Vatable
+                                    </label>
+                                </div>
+                                <div class="price-type">
+                                    <input type="radio" id="wholesale" name="priceType" checked>
+                                    <label for="wholesale">Whole Sale</label>
+                                    <input type="radio" id="retail" name="priceType">
+                                    <label for="retail">Retail Price</label>
+                                    <input type="radio" id="special" name="priceType">
+                                    <label for="special">Special Price</label>
+                                </div>
+                            </div>
+                            
+                            <div class="totals-section">
+                                <div class="form-group">
+                                    <label>Currency</label>
+                                    <select>
+                                        <option>KES</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Rate</label>
+                                    <input type="number" value="1">
+                                </div>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-save">Save</button>
+                                <button class="btn-approve">Approve</button>
+                                <button class="btn-print">Print</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Clients Management -->
+                    <div class="content-window hidden" id="customers">
+                        <div class="window-header">
+                            <i class="fas fa-desktop"></i>
+                            <h3>Client List</h3>
+                            <div class="window-controls">
+                                <button class="btn-help">?</button>
+                                <button class="btn-close-window">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <div class="filter-section">
+                                <div class="filter-group">
+                                    <input type="text" placeholder="Search clients..." class="search-input">
+                                    <button class="btn-go">Go</button>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Category:</label>
+                                    <select>
+                                        <option>ALL</option>
+                                        <option>VIP</option>
+                                        <option>Regular</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Code</th>
+                                            <th>Name</th>
+                                            <th>Contact Person</th>
+                                            <th>Telephone</th>
+                                            <th>Email</th>
+                                            <th>Category</th>
+                                            <th>Credit Limit</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>AUTO001</td>
+                                            <td>SANYA</td>
+                                            <td>John Doe</td>
+                                            <td>0715593483</td>
+                                            <td>sanya@example.com</td>
+                                            <td>VIP</td>
+                                            <td>100,000</td>
+                                            <td>
+                                                <button class="btn-action small">Edit</button>
+                                                <button class="btn-action small">Delete</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>AUTO002</td>
+                                            <td>DEXE GROUP</td>
+                                            <td>Jane Smith</td>
+                                            <td>0707328777</td>
+                                            <td>dexe@example.com</td>
+                                            <td>Regular</td>
+                                            <td>50,000</td>
+                                            <td>
+                                                <button class="btn-action small">Edit</button>
+                                                <button class="btn-action small">Delete</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="record-info">
+                                <span>2 Record(s)</span>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-action" onclick="showClientForm()">New</button>
+                                <button class="btn-action">Edit</button>
+                                <button class="btn-action">Print</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Client Form -->
+                    <div class="content-window hidden" id="clientForm">
+                        <div class="window-header">
+                            <i class="fas fa-desktop"></i>
+                            <h3>Clients</h3>
+                            <div class="window-controls">
+                                <button class="btn-help">?</button>
+                                <button class="btn-close-window">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <div class="form-sections">
+                                <div class="form-section">
+                                    <h4>Basic Information</h4>
+                                    <div class="form-grid">
+                                        <div class="form-group">
+                                            <label>Code</label>
+                                            <input type="text" value="AUTO" readonly class="auto-field">
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" checked> Active
+                                            </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Names *</label>
+                                            <input type="text" placeholder="Enter client name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Contact Person</label>
+                                            <input type="text" placeholder="Enter contact person">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Telephone</label>
+                                            <input type="text" placeholder="Enter telephone">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Mobile *</label>
+                                            <input type="text" placeholder="Enter mobile number">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Fax</label>
+                                            <input type="text" placeholder="Enter fax">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>P.O Box</label>
+                                            <input type="text" placeholder="Enter P.O Box">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Town *</label>
+                                            <input type="text" placeholder="Enter town">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Email</label>
+                                            <input type="email" placeholder="Enter email">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Physical Address</label>
+                                            <textarea placeholder="Enter physical address"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Pin NO. *</label>
+                                            <input type="text" placeholder="Enter PIN number">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4>Business Information</h4>
+                                    <div class="form-grid">
+                                        <div class="form-group">
+                                            <label>Currency</label>
+                                            <select>
+                                                <option>KES</option>
+                                                <option>USD</option>
+                                                <option>EUR</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Vat No.</label>
+                                            <input type="text" placeholder="Enter VAT number">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Credit Warning</label>
+                                            <select>
+                                                <option>None</option>
+                                                <option>Warning</option>
+                                                <option>Block</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Category</label>
+                                            <select>
+                                                <option>VIP</option>
+                                                <option>Regular</option>
+                                                <option>Premium</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Ship To</label>
+                                            <input type="text" placeholder="Enter shipping address">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Route(Region)</label>
+                                            <select>
+                                                <option>Nairobi</option>
+                                                <option>Mombasa</option>
+                                                <option>Kisumu</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Area(Sub-Region)</label>
+                                            <select>
+                                                <option>Central</option>
+                                                <option>East</option>
+                                                <option>West</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Order Location</label>
+                                            <select>
+                                                <option>Main Store</option>
+                                                <option>Branch 1</option>
+                                                <option>Branch 2</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>ID Number</label>
+                                            <input type="text" placeholder="Enter ID number">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Sales Rep</label>
+                                            <input type="text" placeholder="Enter sales representative">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4>Financial Information</h4>
+                                    <div class="form-grid">
+                                        <div class="form-group">
+                                            <label>Terms</label>
+                                            <select>
+                                                <option>Net 30</option>
+                                                <option>Net 15</option>
+                                                <option>Due on Receipt</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Credit Limit</label>
+                                            <input type="number" placeholder="Enter credit limit">
+                                            <label class="checkbox-label">
+                                                <input type="checkbox"> Use Credit Limit
+                                            </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Pay to Account</label>
+                                            <select>
+                                                <option>Cash Account</option>
+                                                <option>Bank Account</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>GL Category</label>
+                                            <select>
+                                                <option>NONE</option>
+                                                <option>Assets</option>
+                                                <option>Liabilities</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Price List</label>
+                                            <select>
+                                                <option>NONE</option>
+                                                <option>Standard</option>
+                                                <option>VIP</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Maiden Name</label>
+                                            <input type="text" placeholder="Enter maiden name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>BD Serial</label>
+                                            <input type="text" placeholder="Enter BD serial">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Deposit Bracket</label>
+                                            <select>
+                                                <option>NONE</option>
+                                                <option>Low</option>
+                                                <option>Medium</option>
+                                                <option>High</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-save">Save</button>
+                                <button class="btn-close">Close</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Customer Opening Balance -->
+                    <div class="content-window hidden" id="customerOpeningBalance">
+                        <div class="window-header">
+                            <i class="fas fa-desktop"></i>
+                            <h3>Customer Opening Balance</h3>
+                            <div class="window-controls">
+                                <button class="btn-help">?</button>
+                                <button class="btn-close-window">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <div class="filter-section">
+                                <div class="filter-group">
+                                    <input type="text" placeholder="Search customers..." class="search-input">
+                                    <button class="btn-go">Go</button>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Branch:</label>
+                                    <select>
+                                        <option>All Branches</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Customer No</th>
+                                            <th>Customer Name</th>
+                                            <th>Opening Balance</th>
+                                            <th>Currency</th>
+                                            <th>Branch</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="6" class="no-data">No records found</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-action">New</button>
+                                <button class="btn-action">Edit</button>
+                                <button class="btn-action">Print</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Clients Terms -->
+                    <div class="content-window hidden" id="clientsTerms">
+                        <div class="window-header">
+                            <i class="fas fa-desktop"></i>
+                            <h3>Clients Terms</h3>
+                            <div class="window-controls">
+                                <button class="btn-help">?</button>
+                                <button class="btn-close-window">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <div class="filter-section">
+                                <div class="filter-group">
+                                    <input type="text" placeholder="Search terms..." class="search-input">
+                                    <button class="btn-go">Go</button>
+                                </div>
+                            </div>
+                            
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Terms Code</th>
+                                            <th>Description</th>
+                                            <th>Days</th>
+                                            <th>Discount %</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="5" class="no-data">No records found</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-action">New</button>
+                                <button class="btn-action">Edit</button>
+                                <button class="btn-action">Print</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Invoice Reversal -->
+                    <div class="content-window hidden" id="invoiceReversal">
+                        <div class="window-header">
+                            <i class="fas fa-desktop"></i>
+                            <h3>Invoice Reversal</h3>
+                            <div class="window-controls">
+                                <button class="btn-help">?</button>
+                                <button class="btn-close-window">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <div class="filter-section">
+                                <div class="filter-group">
+                                    <input type="text" placeholder="Search invoices..." class="search-input">
+                                    <button class="btn-go">Go</button>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Date From:</label>
+                                    <input type="date">
+                                </div>
+                                <div class="filter-group">
+                                    <label>Date To:</label>
+                                    <input type="date">
+                                </div>
+                            </div>
+                            
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Invoice No</th>
+                                            <th>Customer</th>
+                                            <th>Date</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                            <th>Reason</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="6" class="no-data">No records found</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-action">Reverse</button>
+                                <button class="btn-action">Print</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Customer Receipts -->
+                    <div class="content-window hidden" id="customerReceipts">
+                        <div class="window-header">
+                            <i class="fas fa-desktop"></i>
+                            <h3>Customer Receipts</h3>
+                            <div class="window-controls">
+                                <button class="btn-help">?</button>
+                                <button class="btn-close-window">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <div class="filter-section">
+                                <div class="filter-group">
+                                    <input type="text" placeholder="Search receipts..." class="search-input">
+                                    <button class="btn-go">Go</button>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Customer:</label>
+                                    <select>
+                                        <option>All Customers</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Receipt No</th>
+                                            <th>Customer</th>
+                                            <th>Date</th>
+                                            <th>Amount</th>
+                                            <th>Payment Method</th>
+                                            <th>Reference</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="6" class="no-data">No records found</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-action">New</button>
+                                <button class="btn-action">Edit</button>
+                                <button class="btn-action">Print</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Petty Cash -->
+                    <div class="content-window hidden" id="pettyCash">
+                        <div class="window-header">
+                            <i class="fas fa-desktop"></i>
+                            <h3>Petty Cash</h3>
+                            <div class="window-controls">
+                                <button class="btn-help">?</button>
+                                <button class="btn-close-window">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <div class="filter-section">
+                                <div class="filter-group">
+                                    <input type="text" placeholder="Search petty cash..." class="search-input">
+                                    <button class="btn-go">Go</button>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Branch:</label>
+                                    <select>
+                                        <option>All Branches</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Voucher No</th>
+                                            <th>Date</th>
+                                            <th>Description</th>
+                                            <th>Amount</th>
+                                            <th>Category</th>
+                                            <th>Branch</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="6" class="no-data">No records found</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-action">New</button>
+                                <button class="btn-action">Edit</button>
+                                <button class="btn-action">Print</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Clients Aged Analysis -->
+                    <div class="content-window hidden" id="clientsAgedAnalysis">
+                        <div class="window-header">
+                            <i class="fas fa-desktop"></i>
+                            <h3>Clients Aged Analysis</h3>
+                            <div class="window-controls">
+                                <button class="btn-help">?</button>
+                                <button class="btn-close-window">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <div class="filter-section">
+                                <div class="filter-group">
+                                    <label>As At Date:</label>
+                                    <input type="date" value="2025-01-15">
+                                </div>
+                                <div class="filter-group">
+                                    <label>Branch:</label>
+                                    <select>
+                                        <option>All Branches</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <button class="btn-go">Generate Report</button>
+                                </div>
+                            </div>
+                            
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Customer</th>
+                                            <th>Current</th>
+                                            <th>1-30 Days</th>
+                                            <th>31-60 Days</th>
+                                            <th>61-90 Days</th>
+                                            <th>90+ Days</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="7" class="no-data">No records found</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-action">Print</button>
+                                <button class="btn-action">Export</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Customers Allocation -->
+                    <div class="content-window hidden" id="customersAllocation">
+                        <div class="window-header">
+                            <i class="fas fa-desktop"></i>
+                            <h3>Customers Allocation</h3>
+                            <div class="window-controls">
+                                <button class="btn-help">?</button>
+                                <button class="btn-close-window">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <div class="filter-section">
+                                <div class="filter-group">
+                                    <input type="text" placeholder="Search allocations..." class="search-input">
+                                    <button class="btn-go">Go</button>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Customer:</label>
+                                    <select>
+                                        <option>All Customers</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Allocation No</th>
+                                            <th>Customer</th>
+                                            <th>Date</th>
+                                            <th>Invoice</th>
+                                            <th>Receipt</th>
+                                            <th>Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="6" class="no-data">No records found</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-action">New</button>
+                                <button class="btn-action">Edit</button>
+                                <button class="btn-action">Print</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Customers Prepayment -->
+                    <div class="content-window hidden" id="customersPrepayment">
+                        <div class="window-header">
+                            <i class="fas fa-desktop"></i>
+                            <h3>Customers Prepayment</h3>
+                            <div class="window-controls">
+                                <button class="btn-help">?</button>
+                                <button class="btn-close-window">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <div class="filter-section">
+                                <div class="filter-group">
+                                    <input type="text" placeholder="Search prepayments..." class="search-input">
+                                    <button class="btn-go">Go</button>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Customer:</label>
+                                    <select>
+                                        <option>All Customers</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Prepayment No</th>
+                                            <th>Customer</th>
+                                            <th>Date</th>
+                                            <th>Amount</th>
+                                            <th>Applied Amount</th>
+                                            <th>Balance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="6" class="no-data">No records found</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-action">New</button>
+                                <button class="btn-action">Edit</button>
+                                <button class="btn-action">Print</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Customers Statements -->
+                    <div class="content-window hidden" id="customersStatement">
+                        <div class="window-header">
+                            <i class="fas fa-desktop"></i>
+                            <h3>Customers Statements</h3>
+                            <div class="window-controls">
+                                <button class="btn-help">?</button>
+                                <button class="btn-close-window">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <div class="filter-section">
+                                <div class="filter-group">
+                                    <label>Customer:</label>
+                                    <select>
+                                        <option>Select Customer</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label>From Date:</label>
+                                    <input type="date">
+                                </div>
+                                <div class="filter-group">
+                                    <label>To Date:</label>
+                                    <input type="date">
+                                </div>
+                                <div class="filter-group">
+                                    <button class="btn-go">Generate Statement</button>
+                                </div>
+                            </div>
+                            
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Description</th>
+                                            <th>Reference</th>
+                                            <th>Debit</th>
+                                            <th>Credit</th>
+                                            <th>Balance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="6" class="no-data">No records found</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-action">Print</button>
+                                <button class="btn-action">Email</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Profit & Loss -->
+                    <div class="content-window hidden" id="profitLoss">
+                        <div class="window-header">
+                            <i class="fas fa-desktop"></i>
+                            <h3>Profit & Loss</h3>
+                            <div class="window-controls">
+                                <button class="btn-help">?</button>
+                                <button class="btn-close-window">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <div class="filter-section">
+                                <div class="filter-group">
+                                    <label>From Date:</label>
+                                    <input type="date">
+                                </div>
+                                <div class="filter-group">
+                                    <label>To Date:</label>
+                                    <input type="date">
+                                </div>
+                                <div class="filter-group">
+                                    <label>Branch:</label>
+                                    <select>
+                                        <option>All Branches</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <button class="btn-go">Generate Report</button>
+                                </div>
+                            </div>
+                            
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Account</th>
+                                            <th>Description</th>
+                                            <th>Amount</th>
+                                            <th>%</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="4" class="no-data">No records found</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-action">Print</button>
+                                <button class="btn-action">Export</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Purchases -->
+                    <div class="content-window hidden" id="purchases">
+                        <div class="window-header">
+                            <i class="fas fa-desktop"></i>
+                            <h3>Purchases</h3>
+                            <div class="window-controls">
+                                <button class="btn-help">?</button>
+                                <button class="btn-close-window">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <div class="filter-section">
+                                <div class="filter-group">
+                                    <input type="text" placeholder="Search purchases..." class="search-input">
+                                    <button class="btn-go">Go</button>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Supplier:</label>
+                                    <select>
+                                        <option>All Suppliers</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label>From Date:</label>
+                                    <input type="date">
+                                </div>
+                                <div class="filter-group">
+                                    <label>To Date:</label>
+                                    <input type="date">
+                                </div>
+                            </div>
+                            
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Purchase No</th>
+                                            <th>Supplier</th>
+                                            <th>Date</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                            <th>Branch</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="6" class="no-data">No records found</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-action">New</button>
+                                <button class="btn-action">Edit</button>
+                                <button class="btn-action">Print</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Suppliers Management -->
+                    <div class="content-window hidden" id="suppliers">
+                        <div class="window-header">
+                            <i class="fas fa-desktop"></i>
+                            <h3>Suppliers List</h3>
+                            <div class="window-controls">
+                                <button class="btn-help">?</button>
+                                <button class="btn-close-window">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <div class="filter-section">
+                                <div class="filter-group">
+                                    <input type="text" placeholder="Search suppliers..." class="search-input">
+                                    <button class="btn-go">Go</button>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Category:</label>
+                                    <select>
+                                        <option>ALL</option>
+                                        <option>Stocks</option>
+                                        <option>Services</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Code</th>
+                                            <th>Name</th>
+                                            <th>Telephone</th>
+                                            <th>Pin No</th>
+                                            <th>Contact</th>
+                                            <th>Category</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>BKSU31</td>
+                                            <td>DEXE GROUP</td>
+                                            <td>0707328777</td>
+                                            <td>123456789</td>
+                                            <td>John Manager</td>
+                                            <td>Stocks</td>
+                                            <td>
+                                                <button class="btn-action small">Edit</button>
+                                                <button class="btn-action small">Delete</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>BKSU32</td>
+                                            <td>BULAND</td>
+                                            <td>0712345678</td>
+                                            <td>987654321</td>
+                                            <td>Jane Supplier</td>
+                                            <td>Stocks</td>
+                                            <td>
+                                                <button class="btn-action small">Edit</button>
+                                                <button class="btn-action small">Delete</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="record-info">
+                                <span>2 Record(s)</span>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-action" onclick="showSupplierForm()">New</button>
+                                <button class="btn-action">Edit</button>
+                                <button class="btn-action">Print</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Supplier Form -->
+                    <div class="content-window hidden" id="supplierForm">
+                        <div class="window-header">
+                            <i class="fas fa-desktop"></i>
+                            <h3>Supplier</h3>
+                            <div class="window-controls">
+                                <button class="btn-help">?</button>
+                                <button class="btn-close-window">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <div class="form-sections">
+                                <div class="form-section">
+                                    <h4>Basic Information</h4>
+                                    <div class="form-grid">
+                                        <div class="form-group">
+                                            <label>Code</label>
+                                            <input type="text" value="AUTO" readonly class="auto-field">
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" checked> Active
+                                            </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Names *</label>
+                                            <input type="text" placeholder="Enter supplier name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Currency *</label>
+                                            <select>
+                                                <option>KES</option>
+                                                <option>USD</option>
+                                                <option>EUR</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Category *</label>
+                                            <select>
+                                                <option>Stocks</option>
+                                                <option>Services</option>
+                                                <option>Equipment</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Contact Person *</label>
+                                            <input type="text" placeholder="Enter contact person">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Mobile *</label>
+                                            <input type="text" placeholder="Enter mobile number">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Telephone *</label>
+                                            <input type="text" placeholder="Enter telephone">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Fax *</label>
+                                            <input type="text" placeholder="Enter fax">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>P.O Box *</label>
+                                            <input type="text" placeholder="Enter P.O Box">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Town *</label>
+                                            <input type="text" placeholder="Enter town">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Email *</label>
+                                            <input type="email" placeholder="Enter email">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Physical Address *</label>
+                                            <textarea placeholder="Enter physical address"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Vat No. *</label>
+                                            <input type="text" placeholder="Enter VAT number">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Pin NO. *</label>
+                                            <input type="text" placeholder="Enter PIN number">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>GL Category</label>
+                                            <select>
+                                                <option>NONE</option>
+                                                <option>Assets</option>
+                                                <option>Liabilities</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-save">Save</button>
+                                <button class="btn-close">Close</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stocks Module Content Windows -->
+                    
+                    <!-- Categories Management -->
+                    <div class="content-window hidden" id="categories">
+                        <div class="window-header">
+                            <i class="fas fa-desktop"></i>
+                            <h3>Categories</h3>
+                            <div class="window-controls">
+                                <button class="btn-help">?</button>
+                                <button class="btn-close-window">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <div class="filter-section">
+                                <div class="filter-group">
+                                    <input type="text" placeholder="Search categories..." class="search-input">
+                                    <button class="btn-go">Go</button>
+                                </div>
+                            </div>
+                            
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Code</th>
+                                            <th>Category Name</th>
+                                            <th>Description</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>CAT001</td>
+                                            <td>DEXE</td>
+                                            <td>Hair care products</td>
+                                            <td>Active</td>
+                                            <td>
+                                                <button class="btn-action small">Edit</button>
+                                                <button class="btn-action small">Delete</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>CAT002</td>
+                                            <td>GELS</td>
+                                            <td>Styling gels and mousses</td>
+                                            <td>Active</td>
+                                            <td>
+                                                <button class="btn-action small">Edit</button>
+                                                <button class="btn-action small">Delete</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>CAT003</td>
+                                            <td>WAX</td>
+                                            <td>Hair wax products</td>
+                                            <td>Active</td>
+                                            <td>
+                                                <button class="btn-action small">Edit</button>
+                                                <button class="btn-action small">Delete</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="record-info">
+                                <span>3 Record(s)</span>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-action" onclick="showCategoryForm()">New</button>
+                                <button class="btn-action">Edit</button>
+                                <button class="btn-action">Print</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category Form -->
+                    <div class="content-window hidden" id="categoryForm">
+                        <div class="window-header">
+                            <i class="fas fa-desktop"></i>
+                            <h3>Category</h3>
+                            <div class="window-controls">
+                                <button class="btn-help">?</button>
+                                <button class="btn-close-window">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <div class="form-sections">
+                                <div class="form-section">
+                                    <h4>Category Information</h4>
+                                    <div class="form-grid">
+                                        <div class="form-group">
+                                            <label>Code</label>
+                                            <input type="text" value="AUTO" readonly class="auto-field">
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" checked> Active
+                                            </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Category Name *</label>
+                                            <input type="text" placeholder="Enter category name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Description</label>
+                                            <textarea placeholder="Enter category description"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Parent Category</label>
+                                            <select>
+                                                <option>None</option>
+                                                <option>Main Category</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-save">Save</button>
+                                <button class="btn-close">Close</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stocks Names Management -->
+                    <div class="content-window hidden" id="stocksNames">
+                        <div class="window-header">
+                            <i class="fas fa-desktop"></i>
+                            <h3>Item Master Maintenance</h3>
+                            <div class="window-controls">
+                                <button class="btn-help">?</button>
+                                <button class="btn-close-window">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <div class="form-sections">
+                                <div class="form-section">
+                                    <h4>Item Identification</h4>
+                                    <div class="form-grid">
+                                        <div class="form-group">
+                                            <label>Code</label>
+                                            <input type="text" placeholder="Enter item code">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Item Description *</label>
+                                            <input type="text" placeholder="Enter item description">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Category *</label>
+                                            <select>
+                                                <option>DEXE</option>
+                                                <option>GELS</option>
+                                                <option>WAX</option>
+                                                <option>SPRAY</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Sub Category</label>
+                                            <input type="text" placeholder="Enter sub category">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Bin Location</label>
+                                            <input type="text" placeholder="Enter bin location">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4>Pricing Information</h4>
+                                    <div class="form-grid">
+                                        <div class="form-group">
+                                            <label>Basic Price</label>
+                                            <input type="number" placeholder="0.00">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Freight Cost</label>
+                                            <input type="number" placeholder="0.00">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Clearing Cost</label>
+                                            <input type="number" placeholder="0.00">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Cost Price(-Vat)</label>
+                                            <input type="number" placeholder="0.00">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Buying Price</label>
+                                            <input type="number" placeholder="0.00">
+                                            <button class="btn-calc">Calc</button>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Selling Price</label>
+                                            <input type="number" placeholder="0.00">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>WH/Sale Price</label>
+                                            <input type="number" placeholder="0.00">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Special Price</label>
+                                            <input type="number" placeholder="0.00">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Special Price(Qty)</label>
+                                            <input type="number" placeholder="0">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4>Units Information</h4>
+                                    <div class="form-grid">
+                                        <div class="form-group">
+                                            <label>Packing Units</label>
+                                            <select>
+                                                <option>UNIT</option>
+                                                <option>BOX</option>
+                                                <option>PACK</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Selling Units</label>
+                                            <select>
+                                                <option>UNIT</option>
+                                                <option>BOX</option>
+                                                <option>PACK</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Packing Units 2</label>
+                                            <input type="text" placeholder="Enter packing units 2">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Selling Units 2</label>
+                                            <input type="text" placeholder="Enter selling units 2">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4>Inventory Levels</h4>
+                                    <div class="form-grid">
+                                        <div class="form-group">
+                                            <label>Max Level</label>
+                                            <input type="number" placeholder="0">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Reorder Level</label>
+                                            <input type="number" placeholder="0">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Min Level</label>
+                                            <input type="number" placeholder="0">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Shelf Life (Days)</label>
+                                            <input type="number" placeholder="0">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Reorder Qty</label>
+                                            <input type="number" placeholder="0">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4>Item Properties</h4>
+                                    <div class="form-grid">
+                                        <div class="form-group">
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" checked> Active
+                                            </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" checked> Vatable
+                                            </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="checkbox-label">
+                                                <input type="checkbox"> Serialized
+                                            </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" checked> For Sale
+                                            </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" checked> For Purchase
+                                            </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="checkbox-label">
+                                                <input type="checkbox"> Has Batch
+                                            </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="checkbox-label">
+                                                <input type="checkbox"> Has Expiry Date
+                                            </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Weight</label>
+                                            <input type="number" placeholder="0.00">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-section">
+                                    <h4>Additional Information</h4>
+                                    <div class="form-grid">
+                                        <div class="form-group">
+                                            <label>Manufacturer</label>
+                                            <select>
+                                                <option>Select Manufacturer</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Dimensions</label>
+                                            <input type="text" placeholder="Enter dimensions">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Model</label>
+                                            <input type="text" placeholder="Enter model">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Notes</label>
+                                            <textarea placeholder="Enter notes"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>PRT No.</label>
+                                            <input type="text" placeholder="Enter PRT number">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Stocks Account</label>
+                                            <select>
+                                                <option>Select Account</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Revenue Account</label>
+                                            <select>
+                                                <option>Select Account</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Cost of Sale</label>
+                                            <select>
+                                                <option>Select Account</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Currency</label>
+                                            <select>
+                                                <option>KES</option>
+                                                <option>USD</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-save">Save</button>
+                                <button class="btn-close">Close</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stores Management -->
+                    <div class="content-window hidden" id="stores">
+                        <div class="window-header">
+                            <i class="fas fa-desktop"></i>
+                            <h3>Stores</h3>
+                            <div class="window-controls">
+                                <button class="btn-help">?</button>
+                                <button class="btn-close-window">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <div class="filter-section">
+                                <div class="filter-group">
+                                    <input type="text" placeholder="Search stores..." class="search-input">
+                                    <button class="btn-go">Go</button>
+                                </div>
+                            </div>
+                            
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Code</th>
+                                            <th>Store Name</th>
+                                            <th>Location</th>
+                                            <th>Manager</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>ST001</td>
+                                            <td>Main Store</td>
+                                            <td>Nairobi</td>
+                                            <td>John Manager</td>
+                                            <td>Active</td>
+                                            <td>
+                                                <button class="btn-action small">Edit</button>
+                                                <button class="btn-action small">Delete</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>ST002</td>
+                                            <td>Branch Store</td>
+                                            <td>Mombasa</td>
+                                            <td>Jane Manager</td>
+                                            <td>Active</td>
+                                            <td>
+                                                <button class="btn-action small">Edit</button>
+                                                <button class="btn-action small">Delete</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="record-info">
+                                <span>2 Record(s)</span>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-action" onclick="showStoreForm()">New</button>
+                                <button class="btn-action">Edit</button>
+                                <button class="btn-action">Print</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Store Form -->
+                    <div class="content-window hidden" id="storeForm">
+                        <div class="window-header">
+                            <i class="fas fa-desktop"></i>
+                            <h3>Store</h3>
+                            <div class="window-controls">
+                                <button class="btn-help">?</button>
+                                <button class="btn-close-window">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <div class="form-sections">
+                                <div class="form-section">
+                                    <h4>Store Information</h4>
+                                    <div class="form-grid">
+                                        <div class="form-group">
+                                            <label>Code</label>
+                                            <input type="text" value="AUTO" readonly class="auto-field">
+                                            <label class="checkbox-label">
+                                                <input type="checkbox" checked> Active
+                                            </label>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Store Name *</label>
+                                            <input type="text" placeholder="Enter store name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Location *</label>
+                                            <input type="text" placeholder="Enter location">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Manager</label>
+                                            <input type="text" placeholder="Enter manager name">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Address</label>
+                                            <textarea placeholder="Enter store address"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Phone</label>
+                                            <input type="text" placeholder="Enter phone number">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Email</label>
+                                            <input type="email" placeholder="Enter email">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-save">Save</button>
+                                <button class="btn-close">Close</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Adding Stocks Quantity -->
+                    <div class="content-window hidden" id="addingStocks">
+                        <div class="window-header">
+                            <i class="fas fa-desktop"></i>
+                            <h3>Goods Received Note</h3>
+                            <div class="window-controls">
+                                <button class="btn-help">?</button>
+                                <button class="btn-close-window">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <div class="form-header">
+                                <div class="form-group">
+                                    <label>Number</label>
+                                    <input type="text" value="AUTO" readonly class="auto-field">
+                                </div>
+                                <div class="form-group">
+                                    <label>Supplier</label>
+                                    <select>
+                                        <option>DEXE GROUP</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Supplier PO No.</label>
+                                    <input type="text" value="BKSU31">
+                                </div>
+                                <div class="form-group">
+                                    <label>Date</label>
+                                    <input type="date" value="2025-08-28">
+                                </div>
+                                <div class="form-group">
+                                    <label>Location</label>
+                                    <select>
+                                        <option>STORE</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Due Date</label>
+                                    <input type="date" value="2025-08-28">
+                                </div>
+                            </div>
+                            
+                            <div class="add-item-section">
+                                <h4>Add Item</h4>
+                                <div class="item-form">
+                                    <div class="form-group">
+                                        <label>Code</label>
+                                        <select>
+                                            <option>GEL 150GMS</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Names</label>
+                                        <select>
+                                            <option>GEL 150 GMS</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Qty</label>
+                                        <input type="number" value="100">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Price</label>
+                                        <input type="number" value="120.00">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Basic</label>
+                                        <input type="number" value="120.00">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Freight</label>
+                                        <input type="number" value="0">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Clearing</label>
+                                        <input type="number" value="0">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Weight</label>
+                                        <input type="number" value="0">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Tax</label>
+                                        <input type="number" value="1655.17">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Expiry Date</label>
+                                        <input type="date" value="2025-08-28">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Discount</label>
+                                        <input type="number" value="0">
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn-add">Add</button>
+                                        <button class="btn-delete">Delete</button>
+                                        <button class="btn-provision">Provision</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="items-table">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Item Code</th>
+                                            <th>Item Description</th>
+                                            <th>Packing Units</th>
+                                            <th>Qty</th>
+                                            <th>Unit Price</th>
+                                            <th>Line Total</th>
+                                            <th>Vatable</th>
+                                            <th>Vat</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>GEL 150GMS</td>
+                                            <td>GEL 150 GMS</td>
+                                            <td>UNIT</td>
+                                            <td>100</td>
+                                            <td>120.00</td>
+                                            <td>12,000.00</td>
+                                            <td>Yes</td>
+                                            <td>1,655.17</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="totals-section">
+                                <div class="form-group">
+                                    <label>Invoice No.</label>
+                                    <input type="text" placeholder="Enter invoice number">
+                                </div>
+                                <div class="form-group">
+                                    <label>Delivery No.</label>
+                                    <input type="text" placeholder="Enter delivery number">
+                                </div>
+                                <div class="form-group">
+                                    <label>Remarks</label>
+                                    <textarea placeholder="Enter remarks"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Currency</label>
+                                    <select>
+                                        <option>KES</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Rate</label>
+                                    <input type="number" value="1">
+                                </div>
+                            </div>
+                            
+                            <div class="summary-totals">
+                                <div class="total-row">
+                                    <label>Total Exclusive Vat:</label>
+                                    <span>10,344.83</span>
+                                </div>
+                                <div class="total-row">
+                                    <label>Total Discount:</label>
+                                    <span>0.00</span>
+                                </div>
+                                <div class="total-row">
+                                    <label>Total Vat:</label>
+                                    <span>1,655.17</span>
+                                </div>
+                                <div class="total-row">
+                                    <label>Grand Total:</label>
+                                    <span>12,000.00</span>
+                                </div>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-save">Save</button>
+                                <button class="btn-post">Post(Grn)</button>
+                                <button class="btn-post">Post (Invoice/GL)</button>
+                                <button class="btn-print">Print</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Inter-Store Transfer -->
+                    <div class="content-window hidden" id="interStoreTransfer">
+                        <div class="window-header">
+                            <i class="fas fa-desktop"></i>
+                            <h3>Inter-Store Transfer</h3>
+                            <div class="window-controls">
+                                <button class="btn-help">?</button>
+                                <button class="btn-close-window">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <div class="form-header">
+                                <div class="form-group">
+                                    <label>Transfer No.</label>
+                                    <input type="text" value="AUTO" readonly class="auto-field">
+                                </div>
+                                <div class="form-group">
+                                    <label>From Store</label>
+                                    <select>
+                                        <option>Main Store</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>To Store</label>
+                                    <select>
+                                        <option>Branch Store</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Date</label>
+                                    <input type="date" value="2025-08-28">
+                                </div>
+                                <div class="form-group">
+                                    <label>Reference</label>
+                                    <input type="text" placeholder="Enter reference">
+                                </div>
+                            </div>
+                            
+                            <div class="add-item-section">
+                                <h4>Add Item</h4>
+                                <div class="item-form">
+                                    <div class="form-group">
+                                        <label>Item Code</label>
+                                        <select>
+                                            <option>GEL 150GMS</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Item Name</label>
+                                        <select>
+                                            <option>GEL 150 GMS</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Quantity</label>
+                                        <input type="number" placeholder="0">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Unit Cost</label>
+                                        <input type="number" placeholder="0.00">
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn-add">Add</button>
+                                        <button class="btn-delete">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="items-table">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Item Code</th>
+                                            <th>Item Description</th>
+                                            <th>Quantity</th>
+                                            <th>Unit Cost</th>
+                                            <th>Total Cost</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="5" class="no-data">No items added</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-save">Save</button>
+                                <button class="btn-post">Post Transfer</button>
+                                <button class="btn-print">Print</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reducing Stocks Quantity -->
+                    <div class="content-window hidden" id="reducingStocks">
+                        <div class="window-header">
+                            <i class="fas fa-desktop"></i>
+                            <h3>Stock Adjustment</h3>
+                            <div class="window-controls">
+                                <button class="btn-help">?</button>
+                                <button class="btn-close-window">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <div class="form-header">
+                                <div class="form-group">
+                                    <label>Adjustment No.</label>
+                                    <input type="text" value="AUTO" readonly class="auto-field">
+                                </div>
+                                <div class="form-group">
+                                    <label>Store</label>
+                                    <select>
+                                        <option>Main Store</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Date</label>
+                                    <input type="date" value="2025-08-28">
+                                </div>
+                                <div class="form-group">
+                                    <label>Reason</label>
+                                    <select>
+                                        <option>Damaged</option>
+                                        <option>Expired</option>
+                                        <option>Theft</option>
+                                        <option>Other</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="add-item-section">
+                                <h4>Add Item</h4>
+                                <div class="item-form">
+                                    <div class="form-group">
+                                        <label>Item Code</label>
+                                        <select>
+                                            <option>GEL 150GMS</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Item Name</label>
+                                        <select>
+                                            <option>GEL 150 GMS</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Current Qty</label>
+                                        <input type="number" readonly value="100">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Adjustment Qty</label>
+                                        <input type="number" placeholder="0">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>New Qty</label>
+                                        <input type="number" readonly value="100">
+                                    </div>
+                                    <div class="form-group">
+                                        <button class="btn-add">Add</button>
+                                        <button class="btn-delete">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="items-table">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Item Code</th>
+                                            <th>Item Description</th>
+                                            <th>Current Qty</th>
+                                            <th>Adjustment</th>
+                                            <th>New Qty</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td colspan="5" class="no-data">No adjustments made</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-save">Save</button>
+                                <button class="btn-post">Post Adjustment</button>
+                                <button class="btn-print">Print</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Stock Level Report -->
+                    <div class="content-window hidden" id="stockLevelAsAt">
+                        <div class="window-header">
+                            <i class="fas fa-desktop"></i>
+                            <h3>Stock Level As At</h3>
+                            <div class="window-controls">
+                                <button class="btn-help">?</button>
+                                <button class="btn-close-window">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <div class="filter-section">
+                                <div class="filter-group">
+                                    <label>As At Date:</label>
+                                    <input type="date" value="2025-08-28">
+                                </div>
+                                <div class="filter-group">
+                                    <label>Store:</label>
+                                    <select>
+                                        <option>ALL</option>
+                                        <option>Main Store</option>
+                                        <option>Branch Store</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Category:</label>
+                                    <select>
+                                        <option>ALL</option>
+                                        <option>DEXE</option>
+                                        <option>GELS</option>
+                                        <option>WAX</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <button class="btn-go">Generate Report</button>
+                                </div>
+                            </div>
+                            
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Code</th>
+                                            <th>Detail</th>
+                                            <th>P.Units</th>
+                                            <th>Category</th>
+                                            <th>Location</th>
+                                            <th>Qty</th>
+                                            <th>Cost</th>
+                                            <th>Total Cost</th>
+                                            <th>Rol</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>0001</td>
+                                            <td>DEXE SHAMPOO GLOBAL</td>
+                                            <td>UNIT</td>
+                                            <td>DEXE</td>
+                                            <td>STORE</td>
+                                            <td>6,720.00</td>
+                                            <td>98.10</td>
+                                            <td>659,232.00</td>
+                                            <td>0.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>006</td>
+                                            <td>BRAZIL WOOL 200GMS</td>
+                                            <td>UNIT</td>
+                                            <td>DEXE</td>
+                                            <td>STORE</td>
+                                            <td>41,689.00</td>
+                                            <td>29.50</td>
+                                            <td>1,229,825.50</td>
+                                            <td>0.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>005</td>
+                                            <td>BREEZE MOUSSE</td>
+                                            <td></td>
+                                            <td>GELS</td>
+                                            <td>STORE</td>
+                                            <td>368</td>
+                                            <td>189.66</td>
+                                            <td>69,794.88</td>
+                                            <td>0.00</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="record-info">
+                                <span>3 Record(s)</span>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-action">Print</button>
+                                <button class="btn-action">Export</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Best Seller Report -->
+                    <div class="content-window hidden" id="bestSeller">
+                        <div class="window-header">
+                            <i class="fas fa-desktop"></i>
+                            <h3>Best Seller</h3>
+                            <div class="window-controls">
+                                <button class="btn-help">?</button>
+                                <button class="btn-close-window">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <div class="filter-section">
+                                <div class="filter-group">
+                                    <label>Category:</label>
+                                    <select>
+                                        <option>ALL</option>
+                                        <option>DEXE</option>
+                                        <option>GELS</option>
+                                        <option>WAX</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Date From:</label>
+                                    <input type="date" value="2025-07-01">
+                                </div>
+                                <div class="filter-group">
+                                    <label>Date To:</label>
+                                    <input type="date" value="2025-08-28">
+                                </div>
+                                <div class="filter-group">
+                                    <label>Item Code:</label>
+                                    <select>
+                                        <option>ALL</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Item Name:</label>
+                                    <select>
+                                        <option>ALL</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label>List Items:</label>
+                                    <input type="number" value="100000">
+                                </div>
+                            </div>
+                            
+                            <div class="radio-section">
+                                <div class="radio-group">
+                                    <label>Sales By:</label>
+                                    <input type="radio" id="amount" name="salesBy">
+                                    <label for="amount">Amount</label>
+                                    <input type="radio" id="qty" name="salesBy" checked>
+                                    <label for="qty">Qty</label>
+                                </div>
+                                <div class="radio-group">
+                                    <label>Order By:</label>
+                                    <input type="radio" id="highest" name="orderBy" checked>
+                                    <label for="highest">Highest</label>
+                                    <input type="radio" id="lowest" name="orderBy">
+                                    <label for="lowest">Lowest</label>
+                                    <input type="radio" id="noSale" name="orderBy">
+                                    <label for="noSale">No Sale</label>
+                                </div>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-action">Print</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Price List Report -->
+                    <div class="content-window hidden" id="priceList">
+                        <div class="window-header">
+                            <i class="fas fa-desktop"></i>
+                            <h3>Price List</h3>
+                            <div class="window-controls">
+                                <button class="btn-help">?</button>
+                                <button class="btn-close-window">×</button>
+                            </div>
+                        </div>
+                        <div class="window-content">
+                            <div class="filter-section">
+                                <div class="filter-group">
+                                    <label>Category:</label>
+                                    <select>
+                                        <option>ALL</option>
+                                        <option>DEXE</option>
+                                        <option>GELS</option>
+                                        <option>WAX</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label>Price Type:</label>
+                                    <select>
+                                        <option>Selling Price</option>
+                                        <option>Buying Price</option>
+                                        <option>Cost Price</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <button class="btn-go">Generate Report</button>
+                                </div>
+                            </div>
+                            
+                            <div class="table-container">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Code</th>
+                                            <th>Item Description</th>
+                                            <th>Category</th>
+                                            <th>Unit</th>
+                                            <th>Selling Price</th>
+                                            <th>Buying Price</th>
+                                            <th>Cost Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>0001</td>
+                                            <td>DEXE SHAMPOO GLOBAL</td>
+                                            <td>DEXE</td>
+                                            <td>UNIT</td>
+                                            <td>98.10</td>
+                                            <td>85.00</td>
+                                            <td>75.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>006</td>
+                                            <td>BRAZIL WOOL 200GMS</td>
+                                            <td>DEXE</td>
+                                            <td>UNIT</td>
+                                            <td>29.50</td>
+                                            <td>25.00</td>
+                                            <td>22.00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>005</td>
+                                            <td>BREEZE MOUSSE</td>
+                                            <td>GELS</td>
+                                            <td></td>
+                                            <td>189.66</td>
+                                            <td>160.00</td>
+                                            <td>140.00</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <div class="action-buttons">
+                                <button class="btn-action">Print</button>
+                                <button class="btn-action">Export</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <div class="footer-info">
+                <span>USER: DAUDI</span>
+                <span>SERVER: LOCALHOST</span>
+                <span>DATABASE: BREEZE</span>
+                <span>ACCOUNTING DATE: 28 August 2025</span>
+                <span>VERSION: 1.0</span>
+                <span>DbisV1.0</span>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
