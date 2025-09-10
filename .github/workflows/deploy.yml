@@ -1,0 +1,112 @@
+name: Deploy DbisV1.0 Management Information System
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: |
+        npm install
+        npm ci --only=production
+        
+    - name: Validate HTML
+      run: |
+        echo "Validating HTML structure..."
+        # Basic HTML validation
+        if ! grep -q "<!DOCTYPE html>" index.html; then
+          echo "Error: Missing DOCTYPE declaration"
+          exit 1
+        fi
+        if ! grep -q "<title>" index.html; then
+          echo "Error: Missing title tag"
+          exit 1
+        fi
+        echo "HTML validation passed"
+        
+    - name: Validate CSS
+      run: |
+        echo "Validating CSS structure..."
+        if [ ! -f "styles.css" ]; then
+          echo "Error: styles.css not found"
+          exit 1
+        fi
+        echo "CSS validation passed"
+        
+    - name: Validate JavaScript
+      run: |
+        echo "Validating JavaScript structure..."
+        if [ ! -f "script.js" ]; then
+          echo "Error: script.js not found"
+          exit 1
+        fi
+        # Basic syntax check
+        node -c script.js
+        echo "JavaScript validation passed"
+        
+    - name: Test application startup
+      run: |
+        echo "Testing application startup..."
+        # Start the server in background
+        npx http-server -p 3000 -o &
+        SERVER_PID=$!
+        
+        # Wait for server to start
+        sleep 5
+        
+        # Test if server is running
+        if curl -f http://localhost:3000 > /dev/null 2>&1; then
+          echo "Application startup test passed"
+        else
+          echo "Application startup test failed"
+          kill $SERVER_PID
+          exit 1
+        fi
+        
+        # Clean up
+        kill $SERVER_PID
+        
+    - name: Build and deploy
+      run: |
+        echo "Building application..."
+        # Create a simple build process
+        mkdir -p dist
+        cp index.html dist/
+        cp styles.css dist/
+        cp script.js dist/
+        cp package.json dist/
+        
+        echo "Build completed successfully"
+        
+    - name: Deploy to GitHub Pages
+      if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./dist
+        cname: dbis-management-system.github.io
+        
+    - name: Create deployment summary
+      run: |
+        echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
+        echo "- **Repository**: gabrielsanya-ops/David" >> $GITHUB_STEP_SUMMARY
+        echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Status**: ✅ Successfully deployed" >> $GITHUB_STEP_SUMMARY
+        echo "- **Live URL**: https://gabrielsanya-ops.github.io/David" >> $GITHUB_STEP_SUMMARY
